@@ -243,7 +243,7 @@ git push origin feature/your-module-name
 
 | Name   | Module file | Function Description |
 |--------|-------------|----------------------|
-| Sophia | `primer_finder.py` | Check 5' and 3' ends for primer suitability (GC content, hairpins). |
+| Sophia | `alignment_visualizer` | Compare the genome against itself or another sequence and return a text-based grid (dot plot) showing areas of similarity |
 | Noella | `consensus_builder.py` | Given multiple sequences, determine the consensus base at each position. |
 | Otiso | `ncbi_fetcher.py` | Fetch a DNA sequence from NCBI using an accession number (e.g., NM_000546). |
 | Annah  | `mutation_simulator.py` | Randomly introduce SNPs, insertions, or deletions at a user-defined rate. |
@@ -252,11 +252,10 @@ git push origin feature/your-module-name
 | Moreka | `molecular_weight.py` | Calculate predicted melting temperature (Tm) and molecular weight. |
 | Terry  | `orf_predictor.py` | Scan all 6 reading frames for ORFs starting with ATG and ending with a stop codon. |
 | Yann   | `cpg_mapper.py` | Identify high CpG frequency regions (potential gene promoters). |
-| Clement| `seq_validator.py` | Validate and sanitize DNA sequences (remove whitespace, check alphabet). |
+| Clement| `primer_finder.py` |Check 5' and 3' ends for primer suitability (GC content, hairpins).  |
 | Getnet | `restriction_enzyme.py` | Find exact cut indices for a given recognition site (e.g., GAATTC for EcoRI). |
-| Mwasya | `kmer_counter.py` | Count all k-length words (e.g., k=3: AAA, AAT, etc.). |
-
-> @clement should fix this assignment.
+| Mwasya | `kmer_counter.py` | Count all unique k-length words (e.g., k=3: AAA, AAT, etc.). |
+| Bonus  | `seq_valudator.py` | Validate and sanitize DNA sequences (remove whitespace, check alphabet).|
 
 ---
 
