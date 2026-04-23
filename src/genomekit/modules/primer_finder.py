@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+from collections.abc import Generator, Iterator
+
 
 class Primer:
     """
-    Analyse primer properties from a DNA sequence
+    Analyse primer properties from DNA sequences
     """
 
     def __init__(self, sequence: str) -> None:
@@ -12,8 +14,8 @@ class Primer:
         self.sequence = sequence.upper()
 
     @classmethod
-    def from_multiple(cls, sequences: list[str]) -> list[Primer]:
-        return [cls(seq) for seq in sequences]
+    def from_multiple(cls, sequences: list[str]) -> Generator[Primer, None, None]:
+        return (cls(seq) for seq in sequences)
 
     def __str__(self) -> str:
         return self.sequence
@@ -23,13 +25,14 @@ class Primer:
 
     def find_primer(self) -> Primer.PrimerFinderResults:
         """
-        Check the first and last 20 bp for primer-like properties.
+        Check the first and last 20 bp of a DNA sequence for primer-like properties.
         Utilises 3 criteria
         1. Whether the gc content is between 40-60
         2. Whether the sequence can form an internal dime
         3. Whether the melting temperature is between 60-65c
 
         Returns:
+            FIXME: Update what is returned
             A list with one dictionary containing the forward/reverse
             primer sequences and their verdicts.
         """
@@ -57,6 +60,9 @@ class Primer:
         return self.PrimerFinderResults(results, factory=type(self))
 
     class PrimerFinderResults:
+        """Class to store find primer results"""
+
+        # BUG: Can the forward and reverse primers be made objects of class DNA?
         def __init__(self, data_dict, factory):
             self.forward = data_dict["forward_primer"]
             self.for_verdict = data_dict["forward_verdict"]
@@ -69,6 +75,48 @@ class Primer:
                 f"Forward Primer Sequence: {self.forward} | Verdict: {self.for_verdict}\n"
                 f"Backward Primer Sequence: {self.reverse} | Verdict: {self.rev_verdict}\n"
                 f"{'=' * 70}"
+            )
+
+    @classmethod
+    def run_batch(cls, sequences: Iterator[Primer]) -> Iterator[Primer.PrimerFinderResults]:
+        """
+        Accept a list of sequences provided by a user and find primers on them.
+
+        Args:
+            A list of sequences of class Primer ideally obtained using from_multiple() method
+        """
+        for seq in sequences:
+            yield seq.find_primer()
+
+    class PrimerFinderBatchResults:
+        """Class to process a stream of results and produce a summary report"""
+
+        # BUG: Think of how to tie the results to sequence IDs
+        def __init__(self, data_stream: Iterator[Primer.PrimerFinderResults]):
+            # Initialise the summary counters
+            self.total = 0
+            self.full_pass = 0
+            self.forward_pass = 0
+            self.reverse_pass = 0
+
+            # Loop through the stream
+            for result in data_stream:
+                self.total += 1
+                if result.for_verdict:
+                    self.forward_pass += 1
+                if result.rev_verdict:
+                    self.reverse_pass += 1
+                if result.for_verdict and result.rev_verdict:
+                    self.full_pass += 1
+
+        def __repr__(self):
+            return (
+                f"\n{'Primer Finder Results ':=^40}\n"
+                f"Sequences processed:  {self.total}\n"
+                f"Valid full Primers:   {self.full_pass}\n"
+                f"Valid Forward Primer: {self.forward_pass}\n"
+                f"Valid Reverse Primer: {self.reverse_pass}\n"
+                f"{'=' * 40}"
             )
 
     def _gc_content(self, seq: str) -> float:
