@@ -68,7 +68,7 @@ class Primer:
                 f"\n{'Primer Finder Results ':=^70}\n"
                 f"Forward Primer Sequence: {self.forward} | Verdict: {self.for_verdict}\n"
                 f"Backward Primer Sequence: {self.reverse} | Verdict: {self.rev_verdict}\n"
-                f"{'='*70}"
+                f"{'=' * 70}"
             )
 
     def _gc_content(self, seq: str) -> float:
