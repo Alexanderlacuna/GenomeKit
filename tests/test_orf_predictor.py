@@ -1,7 +1,5 @@
-from genomekit.modules.orf_predictor import startcodon
+from genomekit.modules.orf_predictor import find_orfs
 
 
-def simple_test():
-    sequence = "AUGAUGCCGCCA"
-    x = startcodon(sequence)
-    assert x == 2
+def test_basic_orf():
+    assert find_orfs("AAAATGAAATAGCCC") == ["ATGAAATAG"]
